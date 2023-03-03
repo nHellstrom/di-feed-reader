@@ -60,7 +60,6 @@ const RssReader = () => {
 
       temporaryNodeHolder = sortFeed(temporaryNodeHolder);
       setNodeHolder(temporaryNodeHolder);
-      console.log(nodeHolder);
     } catch (error) {
       console.error("☹️ Oh no! ", error);
     }
