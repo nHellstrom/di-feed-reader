@@ -10,7 +10,7 @@ interface IRssItem {
     title: string,
     link: string,
     description: string,
-    pubDate: string,
+    pubDate: Date,
     creator: string,
     media: IMedia | null
 }

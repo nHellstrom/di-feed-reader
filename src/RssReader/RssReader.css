@@ -1,0 +1,18 @@
+.RssReader__container {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2rem 3rem;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.RssReader__updateTime {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: rgb(58, 44, 44);
+}
+
+.RssReader__feed{
+    display: flex;
+    flex-direction: column;
+    gap:1.5rem;
+}

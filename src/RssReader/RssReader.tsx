@@ -1,77 +1,106 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { IMedia, IRssItem } from "../types";
+import { NewsItem } from "../NewsItem/NewsItem";
+import "./RssReader.css";
 
 const RssReader = () => {
-    const rssUrl = 'https://www.di.se/rss';
-    // let nodeHolder:Element[] = [];
-    let nodeHolder:IRssItem[] = [];
+  const [nodeHolder, setNodeHolder] = useState<IRssItem[]>([]);
+  const [updateTime, setUpdateTime] = useState<Date>(new Date(Date.now()));
+  const rssUrl = "https://www.di.se/rss";
 
-    const fetchRss = async () => {
-        const response = await fetch(rssUrl);
-        const text = await response.text();
-        const parsedXml = await new window.DOMParser().parseFromString(text,'text/xml');
-        const snippet = parsedXml.querySelectorAll("item");
+  const fetchRss = async () => {
+    try {
+      const response = await fetch(rssUrl);
+      const text = await response.text();
+      const parsedXml = await new window.DOMParser().parseFromString(
+        text,
+        "text/xml"
+      );
+      const snippet = parsedXml.querySelectorAll("item");
 
-        console.log("🐸 XML Snippet: ", snippet);
+      let temporaryNodeHolder: IRssItem[] = [];
 
-        snippet.forEach(rssItem => {
+      snippet.forEach((rssItem) => {
+        let mediaContent: null | IMedia = null;
+        if (rssItem.getElementsByTagName("media:content")) {
+          mediaContent = {
+            type: rssItem
+              .getElementsByTagName("media:content")[0]
+              ?.getAttribute("type"),
+            url: rssItem
+              .getElementsByTagName("media:content")[0]
+              ?.getAttribute("url"),
+            credit:
+              rssItem.getElementsByTagName("media:content")[0]?.children[0]
+                ?.innerHTML,
+            description:
+              rssItem.getElementsByTagName("media:content")[0]?.children[1]
+                ?.innerHTML,
+            thumbnail: rssItem
+              .getElementsByTagName("media:content")[0]
+              ?.children[2]?.getAttribute("url"),
+          };
+        }
 
-            let mediaContent: null | IMedia = null;
-            if (rssItem.getElementsByTagName("media:content")) {
-                mediaContent = {
-                    type: rssItem.getElementsByTagName("media:content")[0]?.getAttribute("type"),
-                    url: rssItem.getElementsByTagName("media:content")[0]?.getAttribute("url"),
-                    credit: rssItem.getElementsByTagName("media:content")[0]?.children[0]?.innerHTML,
-                    description: rssItem.getElementsByTagName("media:content")[0]?.children[1]?.innerHTML,
-                    thumbnail: rssItem.getElementsByTagName("media:content")[0]?.children[2]?.getAttribute("url"),
+        const newsItem: IRssItem = {
+          title: rssItem.getElementsByTagName("title")[0]?.innerHTML,
+          link: rssItem.getElementsByTagName("link")[0]?.innerHTML,
+          description:
+            rssItem.getElementsByTagName("description")[0]?.innerHTML,
+          pubDate: new Date(
+            Date.parse(rssItem.getElementsByTagName("pubDate")[0]?.innerHTML)
+          ),
+          creator: rssItem.getElementsByTagName("dc:creator")[0]?.innerHTML,
+          media: mediaContent,
+        };
 
-                }
-            }
+        temporaryNodeHolder.push(newsItem);
+      });
 
-            const newsItem: IRssItem = {
-                title: rssItem.getElementsByTagName("title")[0].innerHTML,
-                link: rssItem.getElementsByTagName("link")[0].innerHTML,
-                description: rssItem.getElementsByTagName("description")[0].innerHTML,
-                pubDate: rssItem.getElementsByTagName("pubDate")[0].innerHTML,
-                creator: rssItem.getElementsByTagName("dc:creator")[0].innerHTML,
-                media: mediaContent
-            }
-
-
-            nodeHolder.push(newsItem);
-            
-            // console.log("🐳", rssItem)
-            // console.log("🦩", rssItem.getElementsByTagName("media:content")[0])
-            // console.log("🦩", rssItem.getElementsByTagName("media:content")[0]?.getAttribute("type"))
-            // console.log("🦩", rssItem.getElementsByTagName("media:content")[0]?.getAttribute("url"))
-            // console.log("🦩", rssItem.getElementsByTagName("media:content")[0]?.children)
-            console.log("🌈", rssItem.getElementsByTagName("media:content")[0]?.children[2])
-            // console.log("🦩", rssItem.getElementsByTagName("media:content")[0]?.children.namedItem("credit"))
-            // console.log("🐄", publishDate)
-            console.log(nodeHolder);
-            // console.log(nodeHolder[0].getElementsByTagName("pubDate")[0].innerHTML);
-        });
+      temporaryNodeHolder = sortFeed(temporaryNodeHolder);
+      setNodeHolder(temporaryNodeHolder);
+      console.log(nodeHolder);
+    } catch (error) {
+      console.error("☹️ Oh no! ", error);
     }
+  };
 
-    const sortFeed = () => {
-        nodeHolder.sort((a,b) => {
-            const dateA = a["pubDate"];
+  const sortFeed = (feed: IRssItem[]) => {
+    feed.sort((a, b) => {
+      const dateA = a["pubDate"];
+      const dateB = b["pubDate"];
+      return moment(dateA).isBefore(dateB) ? 1 : -1;
+    });
 
-            const dateB = b["pubDate"];
+    return feed;
+  };
 
-            return moment(dateA).isBefore(dateB) ? 1 : -1;
-        })
+  useEffect(() => {
+    fetchRss();
 
-        nodeHolder.forEach((x,i) => console.log(x["pubDate"], i))
-        console.log(nodeHolder.length)
-    }
+    const updateTimer = setInterval(() => {
+      const timeNow = new Date(Date.now());
+      setUpdateTime(timeNow);
+      fetchRss();
+    }, 30000);
+  }, []);
 
-    return <>
-    <h2>Yo, rss reader here</h2>
-    <button onClick={fetchRss}>Click me to fetch the stream</button>
-    <button onClick={sortFeed}>Click me to sort</button>
-    </>
-}
+  return (
+    <div className="RssReader__container">
+      <p className="RssReader__updateTime">
+        Uppdaterades senast:{" "}
+        {updateTime.toLocaleTimeString("sv", {
+          timeZone: "Europe/Stockholm",
+        })}
+      </p>
+      <div className="RssReader__feed">
+        {nodeHolder.slice(0, 10).map((n) => (
+          <NewsItem rssItem={n} key={n.title} />
+        ))}
+      </div>
+    </div>
+  );
+};
 
-export { RssReader }
+export { RssReader };
