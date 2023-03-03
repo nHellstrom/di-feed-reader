@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <header className="App__header">
-        <img src={roosterLogo} height={"100%"} />
+        <img src={roosterLogo} height={"100%"} alt="Niklas logo"/>
         <h1 className="App__title">Nyhetsflöde - Dagens Industri</h1>
       </header>
       <div className="App__body">
