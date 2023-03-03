@@ -7,11 +7,12 @@ function App() {
   return (
     <div className="App">
       <header className="App__header">
-        <img src={roosterLogo} height={"100%"}/>
+        <img src={roosterLogo} height={"100%"} />
         <h1 className="App__title">Nyhetsflöde - Dagens Industri</h1>
       </header>
       <div className="App__body">
         <RssReader />
+        <p>av Niklas Hellström</p>
       </div>
     </div>
   );
