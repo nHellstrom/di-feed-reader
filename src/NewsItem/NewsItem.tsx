@@ -35,7 +35,6 @@ const NewsItem = ({ rssItem }: any) => {
       <a className="NewsItem__link" href={rssItem.link}>
         Länk
       </a>
-      {/* <p>`${rssItem.media.}`</p> */}
     </div>
   );
 };
