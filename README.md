@@ -4,3 +4,5 @@ A simple web app that continously reads and presents the 10 most recent news ite
 
 ## How to run
 "npm install" followed by "npm run start" in the console to start up a dev instance in the browser
+
+Alternatively, check out the published version over at https://di-feed-reader.netlify.app/
