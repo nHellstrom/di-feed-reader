@@ -8,10 +8,16 @@ html {
   box-sizing: border-box;
 }
 
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .App__header {
   background-color: rgb(158, 69, 69);
-  height: 5vh;
-  width: 100%;
+  height: 7vh;
+  width: 100vw;
   position: sticky;
   top: 0;
   left: 0;
@@ -33,5 +39,26 @@ html {
   margin: 0 auto;
   width: fit-content;
   max-width: 100rem;
-  height: 95vh;
+  height: 93vh;
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 50%;
+  }
+  p {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 390px) {
+  html {
+    font-size: 40%;
+  }
+}
+
+@media (max-width: 330px) {
+  html {
+    font-size: 35%;
+  }
 }

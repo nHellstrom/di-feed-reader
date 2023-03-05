@@ -1,48 +1,65 @@
-.NewsItem__container{
-    background-color: rgb(224, 209, 203);
-    padding-bottom: 1rem;
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    text-align: left;
-    width: 40rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    transition: all 0.15s;
-    overflow: hidden;
+.NewsItem__container {
+  background-color: rgb(224, 209, 203);
+  padding-bottom: 1rem;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: left;
+  width: 40rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.15s;
+  overflow: hidden;
 }
 
 .NewsItem__container:hover {
-    transform: scale(1.2);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
 }
 
 .NewsItem__title {
-    font-size: 1.8rem;
-    margin: 1rem;
-    display: inline-block;
-    font-weight: 600;
-    text-shadow: rgba(0, 0, 0, 0.33) 0 0 6px;
+  font-size: 1.8rem;
+  margin: 1rem;
+  display: inline-block;
+  font-weight: 600;
+  text-shadow: rgba(0, 0, 0, 0.33) 0 0 6px;
 }
 
 .NewsItem__pubInfo {
-    font-size: 1.3rem;
-    font-weight: 300;
-    margin: 1rem 7px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  font-size: 1.3rem;
+  font-weight: 300;
+  margin: 1rem 7px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .NewsItem__description {
-    font-size: 1.6rem;
-    text-align: justify;
-    margin: 0.67rem;
+  font-size: 1.6rem;
+  text-align: justify;
+  margin: 0.67rem;
 }
 
 .NewsItem__link {
-    font-size: 1.2rem;
-    font-weight: 500;
-    align-self: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  align-self: center;
+}
+
+@media (max-width: 600px) {
+    .NewsItem__container {
+        width: 95vw;
+    }
+    .NewsItem__container:hover {
+      transform: none;
+    }
+  }
+  
+
+@media (max-width: 500px) {
+  .NewsItem__title,
+  .NewsItem__description {
+    font-size: 2rem;
+  }
 }
